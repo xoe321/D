@@ -1,0 +1,171 @@
+local gui = Instance.new("ScreenGui")
+gui.Name = "F"
+gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Position = UDim2.new(0.373, 0, 0.304, 0)
+frame.Size = UDim2.new(0, 238, 0, 199)
+frame.BackgroundColor3 = Color3.new(0, 0, 0)
+frame.BackgroundTransparency = 0.5
+frame.Parent = gui
+
+local i = Instance.new("ImageLabel")
+i.Position = UDim2.new(-0.001, 0, 0.12, 0)
+i.Size = UDim2.new(0, 238, 0, 179)
+i.Image = "rbxassetid://6403436054"
+i.Parent = frame
+
+local text = Instance.new("TextLabel")
+text.Position = UDim2.new(0.08, 0, 0.3, 0)
+text.Size = UDim2.new(0, 200, 0, 50)
+text.BackgroundTransparency = 1
+text.Text = "โปรกระจอก!"
+text.TextSize = 40
+text.Parent = frame
+
+local button = Instance.new("TextButton")
+button.Position = UDim2.new(0.09, 0, 0.70, 0)
+button.Size = UDim2.new(0, 200, 0, 50)
+button.BackgroundColor3 = Color3.new(1, 1, 1)
+button.Text = "เก็บของเอง(ทุกๆ5วิ)"
+button.TextSize = 20
+button.Parent = frame
+
+local button1 = Instance.new("TextButton")
+button1.Position = UDim2.new(0.09, 0, 0.97, 0)
+button1.Size = UDim2.new(0, 200, 0, 50)
+button1.BackgroundColor3 = Color3.new(1, 1, 1)
+button1.Text = "ปิดหมอก"
+button1.TextSize = 20
+button1.Parent = frame
+
+local button2 = Instance.new("TextButton")
+button2.Position = UDim2.new(0.09, 0, 1.235, 0)
+button2.Size = UDim2.new(0, 200, 0, 50)
+button2.BackgroundColor3 = Color3.new(1, 1, 1)
+button2.Text = "แสง(ใช้ตอนกลางคืน)"
+button2.TextSize = 20
+button2.Parent = frame
+
+local button3 = Instance.new("TextButton")
+button3.Position = UDim2.new(0.09, 0, 1.500, 0)
+button3.Size = UDim2.new(0, 200, 0, 50)
+button3.BackgroundColor3 = Color3.new(1, 1, 1)
+button3.Text = "เปลียนท้องฟ้า"
+button3.TextSize = 20
+button3.Parent = frame
+
+local button5 = Instance.new("TextButton")
+button5.Position = UDim2.new(0.09, 0, 1.770, 0)
+button5.Size = UDim2.new(0, 200, 0, 50)
+button5.BackgroundColor3 = Color3.new(1, 1, 1)
+button5.Text = "ทะลุ"
+button5.TextSize = 20
+button5.Parent = frame
+
+-- ทำให้ Frame สามารถลากได้
+local dragging, dragInput, dragStart, startPos
+
+frame.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		-- เริ่มการลาก
+		dragging = true
+		dragStart = input.Position
+		startPos = frame.Position
+	end
+end)
+
+frame.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+		-- คำนวณตำแหน่งใหม่ระหว่างการลาก
+		local delta = input.Position - dragStart
+		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
+end)
+
+frame.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		-- หยุดการลาก
+		dragging = false
+	end
+end)
+
+button.MouseButton1Click:Connect(function()
+	local runtimeItems = workspace:WaitForChild("RuntimeItems")
+	local replicatedStorage = game:GetService("ReplicatedStorage")
+	local storeItemRemote = replicatedStorage:WaitForChild("Remotes"):WaitForChild("StoreItem")
+
+	while true do
+		for _, item in ipairs(runtimeItems:GetChildren()) do
+			if item:IsA("Model") then
+				local args = { item }
+				storeItemRemote:FireServer(unpack(args))
+			end
+		end
+		task.wait(5) -- รอ 5 วินาทีแล้วทำซ้ำ
+	end
+end)
+
+local A = game:GetService("Lighting").Atmosphere
+local L = game:GetService("Lighting")
+
+button1.MouseButton1Click:Connect(function()
+	A.Density = 0
+end)
+
+button2.MouseButton1Click:Connect(function()
+	L.ClockTime = 14
+end)
+
+local sky = game:GetService("Lighting").GrayCloudSky
+
+button3.MouseButton1Click:Connect(function()
+	local success, errorMessage = pcall(function()
+		sky.SkyboxBk = "rbxassetid://13107325341"
+		sky.SkyboxDn = "rbxassetid://13107329809"
+		sky.SkyboxFt = "rbxassetid://13107334845"
+		sky.SkyboxLf = "rbxassetid://13107337703"
+		sky.SkyboxRt = "rbxassetid://13107340396"
+		sky.SkyboxUp = "rbxassetid://13107344387"
+	end)
+
+	if not success then
+		warn("เกิดข้อผิดพลาดในการเปลี่ยน Skybox: " .. errorMessage)
+	end
+end)
+
+local noclipEnabled = false
+local function toggleNoclip(state)
+	noclipEnabled = state
+	local character = game.Players.LocalPlayer.Character
+	local runService = game:GetService("RunService")
+
+	if noclipEnabled then
+		-- เปิด noclip
+		runService.Stepped:Connect(function()
+			if noclipEnabled and character then
+				for _, part in pairs(character:GetChildren()) do
+					if part:IsA("BasePart") then
+						part.CanCollide = false
+					end
+				end
+			end
+		end)
+	else
+		-- ปิด noclip
+		if character then
+			for _, part in pairs(character:GetChildren()) do
+				if part:IsA("BasePart") then
+					part.CanCollide = true
+				end
+			end
+		end
+	end
+end
+
+-- เชื่อมต่อกับ button4
+button5.MouseButton1Click:Connect(function()
+	noclipEnabled = not noclipEnabled
+	toggleNoclip(noclipEnabled)
+end)
