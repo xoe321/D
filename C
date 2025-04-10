@@ -63,34 +63,41 @@ button5.Text = "ทะลุ"
 button5.TextSize = 20
 button5.Parent = frame
 
--- ทำให้ Frame สามารถลากได้
-local dragging, dragInput, dragStart, startPos
+-- ระบบลาก GUI รองรับมือถือและ PC
+local UserInputService = game:GetService("UserInputService")
+local dragging, dragStart, startPos
 
-frame.InputBegan:Connect(function(input, gameProcessed)
-	if gameProcessed then return end
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		-- เริ่มการลาก
+local function updateInput(input)
+	local delta = input.Position - dragStart
+	frame.Position = UDim2.new(
+		startPos.X.Scale,
+		startPos.X.Offset + delta.X,
+		startPos.Y.Scale,
+		startPos.Y.Offset + delta.Y
+	)
+end
+
+frame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		dragging = true
 		dragStart = input.Position
 		startPos = frame.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
 	end
 end)
 
-frame.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		-- คำนวณตำแหน่งใหม่ระหว่างการลาก
-		local delta = input.Position - dragStart
-		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		updateInput(input)
 	end
 end)
 
-frame.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		-- หยุดการลาก
-		dragging = false
-	end
-end)
-
+-- ปุ่ม: เก็บของเองทุก 5 วิ
 button.MouseButton1Click:Connect(function()
 	local runtimeItems = workspace:WaitForChild("RuntimeItems")
 	local replicatedStorage = game:GetService("ReplicatedStorage")
@@ -99,27 +106,27 @@ button.MouseButton1Click:Connect(function()
 	while true do
 		for _, item in ipairs(runtimeItems:GetChildren()) do
 			if item:IsA("Model") then
-				local args = { item }
-				storeItemRemote:FireServer(unpack(args))
+				storeItemRemote:FireServer(item)
 			end
 		end
-		task.wait(5) -- รอ 5 วินาทีแล้วทำซ้ำ
+		task.wait(5)
 	end
 end)
 
+-- ปุ่ม: ปิดหมอก
 local A = game:GetService("Lighting").Atmosphere
-local L = game:GetService("Lighting")
-
 button1.MouseButton1Click:Connect(function()
 	A.Density = 0
 end)
 
+-- ปุ่ม: เปลี่ยนเวลา
+local L = game:GetService("Lighting")
 button2.MouseButton1Click:Connect(function()
 	L.ClockTime = 14
 end)
 
+-- ปุ่ม: เปลี่ยนท้องฟ้า
 local sky = game:GetService("Lighting").GrayCloudSky
-
 button3.MouseButton1Click:Connect(function()
 	local success, errorMessage = pcall(function()
 		sky.SkyboxBk = "rbxassetid://13107325341"
@@ -135,6 +142,7 @@ button3.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- ปุ่ม: ทะลุ (noclip)
 local noclipEnabled = false
 local function toggleNoclip(state)
 	noclipEnabled = state
@@ -142,7 +150,6 @@ local function toggleNoclip(state)
 	local runService = game:GetService("RunService")
 
 	if noclipEnabled then
-		-- เปิด noclip
 		runService.Stepped:Connect(function()
 			if noclipEnabled and character then
 				for _, part in pairs(character:GetChildren()) do
@@ -153,7 +160,6 @@ local function toggleNoclip(state)
 			end
 		end)
 	else
-		-- ปิด noclip
 		if character then
 			for _, part in pairs(character:GetChildren()) do
 				if part:IsA("BasePart") then
@@ -164,7 +170,6 @@ local function toggleNoclip(state)
 	end
 end
 
--- เชื่อมต่อกับ button4
 button5.MouseButton1Click:Connect(function()
 	noclipEnabled = not noclipEnabled
 	toggleNoclip(noclipEnabled)
