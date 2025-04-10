@@ -1,7 +1,7 @@
 local Gui = Instance.new("ScreenGui")
 Gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 local F = Instance.new("Frame")
-F.Size = UDim2.new(0.537, 0,0.789, 0) -- เปลี่ยนขนาดแกน Y เป็น 0.2 (จาก 0.389) ทำให้แบนลง
+F.Size = UDim2.new(0.537, 0,0.800, 0) -- เปลี่ยนขนาดแกน Y เป็น 0.2 (จาก 0.389) ทำให้แบนลง
 F.Position = UDim2.new(0.231, 0,0.31, 0)
 F.BackgroundColor3 = Color3.new(0, 0, 0)
 F.Parent = Gui
@@ -91,16 +91,6 @@ local UT = Instance.new("UITextSizeConstraint")
 UT.MinTextSize = 1
 UT.MaxTextSize = 18
 UT.Parent = B1
-
--- ปุ่ม "ล็อกหัว"
-local B2 = Instance.new("TextButton")
-B2.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
-B2.Position = UDim2.new(0.269, 0,0.1, 0) -- ปรับตำแหน่ง Y และขนาด Y
-B2.Size = UDim2.new(0.24, 0,0.25, 0) -- ปรับขนาด Y
-B2.TextSize = 10
-B2.TextColor3 = Color3.new(0.219608, 1, 0.0823529)
-B2.Text = "Soon"
-B2.Parent = F
 -- local U3 = Instance.new("UIAspectRatioConstraint")
 -- U3.AspectRatio = 2.447
 -- U3.AspectType = "FitWithinMaxSize"
@@ -117,7 +107,7 @@ UT2.Parent = B2
 -- ปุ่ม "ลบหมอก"
 local B3 = Instance.new("TextButton")
 B3.BackgroundColor3 = Color3.new(0.984314, 1, 0.054902)
-B3.Position = UDim2.new(0.019, 0,0.375, 0) -- ปรับตำแหน่ง Y และขนาด Y
+B3.Position = UDim2.new(0.519, 0,0.65, 0) -- ปรับตำแหน่ง Y และขนาด Y
 B3.Size = UDim2.new(0.24, 0,0.25, 0) -- ปรับขนาด Y
 B3.TextSize = 10
 B3.TextColor3 = Color3.new(0, 0, 0)
@@ -183,11 +173,11 @@ UT5.Parent = B5
 -- ปุ่ม "เก็บของแบบถือเอง"
 local B6 = Instance.new("TextButton")
 B6.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
-B6.Position = UDim2.new(0.269, 0,0.65, 0) -- ปรับตำแหน่ง Y และขนาด Y
+B6.Position = UDim2.new(0.269, 0,0.1, 0) -- ปรับตำแหน่ง Y และขนาด Y
 B6.Size = UDim2.new(0.24, 0,0.25, 0) -- ปรับขนาด Y
 B6.TextSize = 10
 B6.TextColor3 = Color3.new(0.219608, 1, 0.0823529)
-B6.Text = "Soon"
+B6.Text = "รอนะ"
 B6.Parent = F
 -- local U7 = Instance.new("UIAspectRatioConstraint")
 -- U7.AspectRatio = 2.447
@@ -205,7 +195,7 @@ UT6.Parent = B6
 -- ปุ่ม "ทะลุ"
 local B7 = Instance.new("TextButton")
 B7.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
-B7.Position = UDim2.new(0.487, 0,0.65, 0) -- ปรับตำแหน่ง Y และขนาด Y
+B7.Position = UDim2.new(0.019, 0,0.375, 0) -- ปรับตำแหน่ง Y และขนาด Y
 B7.Size = UDim2.new(0.24, 0,0.25, 0) -- ปรับขนาด Y
 B7.TextSize = 10
 B7.TextColor3 = Color3.new(0.219608, 1, 0.0823529)
@@ -227,7 +217,7 @@ UT7.Parent = B7
 -- ปุ่ม "ไปจุดจบเลย [ยังไม่เสร็จ]"
 local B8 = Instance.new("TextButton")
 B8.BackgroundColor3 = Color3.new(0.952941, 1, 0.0627451)
-B8.Position = UDim2.new(0.269, 0,0.925, 0) -- ปรับตำแหน่ง Y และขนาด Y
+B8.Position = UDim2.new(0.269, 0,0.65, 0) -- ปรับตำแหน่ง Y และขนาด Y
 B8.Size = UDim2.new(0.24, 0,0.25, 0) -- ปรับขนาด Y
 B8.TextSize = 10
 B8.TextColor3 = Color3.new(0, 0, 0)
@@ -282,7 +272,7 @@ UC10.Parent = MusicTextBox
 
 local PlayButton = Instance.new("TextButton")
 PlayButton.Size = UDim2.new(0.4, 0, 0.2, 0) -- ปรับขนาด Y
-PlayButton.Position = UDim2.new(0.05, 0, 0.4, 0)
+PlayButton.Position = UDim2.new(0.55, 0, 0.65, 0)
 PlayButton.BackgroundColor3 = Color3.new(1, 1, 1)
 PlayButton.TextColor3 = Color3.new(0, 0, 0)
 PlayButton.TextSize = 12
@@ -337,7 +327,7 @@ end)
 
 local Stop = Instance.new("TextButton")
 Stop.Size = UDim2.new(0.4, 0, 0.2, 0) -- ปรับขนาด Y
-Stop.Position = UDim2.new(0.55, 0, 0.65, 0)
+Stop.Position = UDim2.new(0.55, 0, 0.89, 0)
 Stop.BackgroundColor3 = Color3.new(1, 1, 1)
 Stop.TextColor3 = Color3.new(0, 0, 0)
 Stop.TextSize = 12
