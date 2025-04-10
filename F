@@ -308,7 +308,7 @@ PlayButton.MouseButton1Click:Connect(function()
 		local sound = Instance.new("Sound")
 		sound.Name = "DynamicSound"
 		sound.SoundId = "rbxassetid://" .. soundId
-		sound.Parent = script.Parent
+		sound.Parent = workspace
 		sound.Volume = 1
 		sound.Looped = false
 
