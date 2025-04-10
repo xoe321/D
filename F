@@ -300,3 +300,220 @@ StopButton.TextColor3 = Color3.new(0, 0, 0)
 StopButton.TextSize = 12
 StopButton.Text = "ปิดเพลง"
 StopButton.Parent = MusicFrame
+-- local UC12 = Instance.new("UICorner")
+-- UC12.CornerRadius = UDim.new(0, 5)
+-- UC12.Parent = StopButton
+
+
+PlayButton.MouseButton1Click:Connect(function()
+	local soundId = MusicTextBox.Text -- รับไอดีจาก TextBox
+	if soundId ~= "" then
+		-- ลบ Sound เดิมถ้ามี
+		local oldSound = script.Parent:FindFirstChild("DynamicSound")
+		if oldSound then
+			oldSound:Destroy()
+		end
+
+		-- สร้าง Sound ใหม่
+		local sound = Instance.new("Sound")
+		sound.Name = "DynamicSound"
+		sound.SoundId = "rbxassetid://" .. soundId
+		sound.Parent = script.Parent
+		sound.Volume = 1
+		sound.Looped = false
+
+		-- เล่นเสียง
+		sound:Play()
+
+		StopButton.MouseButton1Click:Connect(function()
+			if sound and sound.IsPlaying then
+				sound:Stop()
+			end
+		end)
+	end
+end)
+
+
+
+local Stop = Instance.new("TextButton")
+Stop.Size = UDim2.new(0.4, 0, 0.3, 0)
+Stop.Position = UDim2.new(0.55, 0, 1.3, 0)
+Stop.BackgroundColor3 = Color3.new(1, 1, 1)
+Stop.TextColor3 = Color3.new(0, 0, 0)
+Stop.TextSize = 12
+Stop.Text = "ปิดหน้าต่าง"
+Stop.Parent = MusicFrame
+-- local UC12 = Instance.new("UICorner")
+-- UC12.CornerRadius = UDim.new(0, 5)
+-- UC12.Parent = Stop
+
+-- เพิ่มฟังก์ชันการทำงานของปุ่มปิดเพลงตามต้องการ
+Stop.MouseButton1Click:Connect(function()
+	F.Visible = false
+end)
+-- ฟังก์ชันอัปเดตปุ่ม
+local runtimeItems = workspace:WaitForChild("RuntimeItems")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local storeItemRemote = replicatedStorage:WaitForChild("Remotes"):WaitForChild("StoreItem")
+
+local isOn = false -- สถานะเริ่มต้น
+local isOn1 = false
+local isOn6 = false
+
+local function updateButton(button, onColor, offColor, onTextColor, offTextColor)
+	if isOn then
+		button.BackgroundColor3 = onColor
+		button.TextColor3 = onTextColor
+	else
+		button.BackgroundColor3 = offColor
+		button.TextColor3 = offTextColor
+	end
+end
+
+local function updateButton1(button, onColor, offColor, onTextColor, offTextColor)
+	if isOn1 then
+		button.BackgroundColor3 = onColor
+		button.TextColor3 = onTextColor
+	else
+		button.BackgroundColor3 = offColor
+		button.TextColor3 = offTextColor
+	end
+end
+
+local function updateButton6(button, onColor, offColor, onTextColor, offTextColor)
+	if isOn6 then
+		button.BackgroundColor3 = onColor
+		button.TextColor3 = onTextColor
+	else
+		button.BackgroundColor3 = offColor
+		button.TextColor3 = offTextColor
+	end
+end
+-- เรียกตอนเริ่มต้น
+
+-- เมื่อคลิก
+B1.MouseButton1Click:Connect(function()
+	isOn = not isOn -- สลับสถานะ
+	updateButton(B1, Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 0, 0), Color3.new(1, 1, 1), Color3.new(0.219608, 1, 0.0823529))
+
+	if isOn then
+		-- เริ่มการทำงาน
+		while isOn do
+			for _, item in ipairs(runtimeItems:GetChildren()) do
+				if item:IsA("Model") then
+					storeItemRemote:FireServer(item)
+				end
+			end
+			task.wait(5) -- รอ 5 วินาทีแล้วทำใหม่
+		end
+	else
+		-- หยุดการทำงาน
+		-- ในกรณีนี้ เราหยุดการทำงานของ while loop โดยใช้ `isOn = false` เพื่อให้ลูปหยุด
+		-- จะทำการออกจากลูปเมื่อ `isOn` เป็น `false`
+		return -- ออกจากฟังก์ชัน
+	end
+end)
+
+local Atmosphere = game:GetService("Lighting").Atmosphere
+local function ClearAtmosphere()
+	Atmosphere.Density = 0
+end
+
+B3.MouseButton1Click:Connect(function()
+	ClearAtmosphere()
+end)
+
+local sky = game:GetService("Lighting").GrayCloudSky
+B5.MouseButton1Click:Connect(function()
+	local success, errorMessage = pcall(function()
+		sky.SkyboxBk = "rbxassetid://13107325341"
+		sky.SkyboxDn = "rbxassetid://13107329809"
+		sky.SkyboxFt = "rbxassetid://13107334845"
+		sky.SkyboxLf = "rbxassetid://13107337703"
+		sky.SkyboxRt = "rbxassetid://13107340396"
+		sky.SkyboxUp = "rbxassetid://13107344387"
+	end)
+
+	if not success then
+		warn("เกิดข้อผิดพลาดในการเปลี่ยน Skybox: " .. errorMessage)
+	end
+end)
+
+local noclipEnabled = false
+local function toggleNoclip(state)
+	noclipEnabled = state
+	local character = game.Players.LocalPlayer.Character
+	local runService = game:GetService("RunService")
+
+	if noclipEnabled then
+		runService.Stepped:Connect(function()
+			if noclipEnabled and character then
+				for _, part in pairs(character:GetChildren()) do
+					if part:IsA("BasePart") then
+						part.CanCollide = false
+					end
+				end
+			end
+		end)
+	else
+		if character then
+			for _, part in pairs(character:GetChildren()) do
+				if part:IsA("BasePart") then
+					part.CanCollide = true
+				end
+			end
+		end
+	end
+end
+
+B7.MouseButton1Click:Connect(function()
+	isOn1 = not isOn1 -- สลับสถานะ
+	updateButton1(B7, Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 0, 0), Color3.new(1, 1, 1), Color3.new(0.219608, 1, 0.0823529))
+	noclipEnabled = not noclipEnabled
+	toggleNoclip(noclipEnabled)
+end)
+
+local l = game:GetService("Lighting")
+
+B8.MouseButton1Click:Connect(function()
+	l.ClockTime = 12.1
+end)
+
+
+
+B4.MouseButton1Click:Connect(function()
+	isOn6 = not isOn6 -- สลับสถานะ
+	updateButton6(B4, Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 0, 0), Color3.new(1, 1, 1), Color3.new(0.219608, 1, 0.0823529))
+	if isOn6 then
+		local character = game.Players.LocalPlayer.Character
+		if character then
+			local tool = character:FindFirstChildOfClass("Tool")
+			if tool then
+				local args = {
+					[1] = 1744296490.392746, -- ตัวอย่าง ID (อาจไม่จำเป็นต้องมี)
+					[2] = tool
+				}
+				-- เริ่มการทำงาน
+				while isOn6 do
+					-- ส่งคำสั่ง Reload ไปยังเซิร์ฟเวอร์
+					game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Weapon"):WaitForChild("Reload"):FireServer(unpack(args))
+
+					-- เพิ่มการหน่วงเวลาเล็กน้อย เพื่อไม่ให้เกิดการโหลดเกินไป
+					task.wait(0.1) -- คุณสามารถปรับเวลาใน wait() ได้ตามต้องการ
+				end
+				print("on auto reload")
+			else
+				warn("ไม่พบ Tool ในตัวละคร")
+				isOn6 = false
+				updateButton6(B4, Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 0, 0), Color3.new(1, 1, 1), Color3.new(0.219608, 1, 0.0823529))
+			end
+		else
+			warn("ไม่พบตัวละคร")
+			isOn6 = false
+			updateButton6(B4, Color3.fromRGB(0, 0, 255), Color3.fromRGB(255, 0, 0), Color3.new(1, 1, 1), Color3.new(0.219608, 1, 0.0823529))
+		end
+	else
+		print("off auto reload")
+		return
+	end
+end)
