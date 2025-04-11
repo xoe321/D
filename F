@@ -9,7 +9,7 @@ F.Visible = false
 local menu = Instance.new("ImageButton")
 menu.Position = UDim2.new(0.763, 0,0.148, 0)
 menu.Size = UDim2.new(0, 50,0, 50)
-menu.Image = "rbxassetid://135218137076635"
+menu.Image = "rbxassetid://5873794859"
 menu.Transparency = 1
 menu.Parent = Gui
 local UC13 = Instance.new("UICorner")
@@ -63,14 +63,11 @@ UserInputService.InputChanged:Connect(function(input)
 	end
 end)
 
--- local U1 = Instance.new("UIAspectRatioConstraint")
--- U1.AspectRatio = 1.5559
--- U1.AspectType = "FitWithinMaxSize"
--- U1.Parent = F
+
+
 local UC = Instance.new("UICorner")
 UC.CornerRadius = UDim.new(0, 8)
 UC.Parent = F
-
 -- ปุ่ม "เก็บของเองทุกๆ5วิ" (แก้ไขจากโค้ดเดิม)
 local B1 = Instance.new("TextButton")
 B1.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
@@ -91,20 +88,6 @@ local UT = Instance.new("UITextSizeConstraint")
 UT.MinTextSize = 1
 UT.MaxTextSize = 18
 UT.Parent = B1
--- local U3 = Instance.new("UIAspectRatioConstraint")
--- U3.AspectRatio = 2.447
--- U3.AspectType = "FitWithinMaxSize"
--- U3.Parent = B2
-local UC2 = Instance.new("UICorner")
-UC2.CornerRadius = UDim.new(0, 8)
-UC2.Parent = B2
-local UT2 = Instance.new("UITextSizeConstraint")
-UT2.MinTextSize = 1
-UT2.MaxTextSize = 18
-UT2.Parent = B2
--- เพิ่มฟังก์ชันการทำงานของปุ่มนี้ตามต้องการ
-
--- ปุ่ม "ลบหมอก"
 local B3 = Instance.new("TextButton")
 B3.BackgroundColor3 = Color3.new(0.984314, 1, 0.054902)
 B3.Position = UDim2.new(0.519, 0,0.65, 0) -- ปรับตำแหน่ง Y และขนาด Y
@@ -278,10 +261,13 @@ PlayButton.TextColor3 = Color3.new(0, 0, 0)
 PlayButton.TextSize = 12
 PlayButton.Text = "เล่น"
 PlayButton.Parent = MusicFrame
-local UC11 = Instance.new("UICorner")
-UC11.CornerRadius = UDim.new(0, 5)
-UC11.Parent = PlayButton
--- เพิ่มฟังก์ชันการทำงานของปุ่มเล่นเพลงตามต้องการ
+
+local sound = Instance.new("Sound")
+sound.Name = "Playsong"
+sound.Volume = 1 
+sound.Looped = false
+sound.Parent = workspace
+
 local StopButton = Instance.new("TextButton")
 StopButton.Size = UDim2.new(0.4, 0, 0.2, 0) -- ปรับขนาด Y
 StopButton.Position = UDim2.new(0.55, 0, 0.4, 0)
@@ -294,25 +280,10 @@ local UC12 = Instance.new("UICorner")
 UC12.CornerRadius = UDim.new(0, 5)
 UC12.Parent = StopButton
 
-
 PlayButton.MouseButton1Click:Connect(function()
 	local soundId = MusicTextBox.Text -- รับไอดีจาก TextBox
 	if soundId ~= "" then
-		-- ลบ Sound เดิมถ้ามี
-		local oldSound = script.Parent:FindFirstChild("DynamicSound")
-		if oldSound then
-			oldSound:Destroy()
-		end
-
-		-- สร้าง Sound ใหม่
-		local sound = Instance.new("Sound")
-		sound.Name = "DynamicSound"
 		sound.SoundId = "rbxassetid://" .. soundId
-		sound.Parent = workspace
-		sound.Volume = 1
-		sound.Looped = false
-
-		-- เล่นเสียง
 		sound:Play()
 
 		StopButton.MouseButton1Click:Connect(function()
@@ -322,6 +293,12 @@ PlayButton.MouseButton1Click:Connect(function()
 		end)
 	end
 end)
+
+local UC11 = Instance.new("UICorner")
+UC11.CornerRadius = UDim.new(0, 5)
+UC11.Parent = PlayButton
+-- เพิ่มฟังก์ชันการทำงานของปุ่มเล่นเพลงตามต้องการ
+
 
 
 
