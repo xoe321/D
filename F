@@ -64,10 +64,6 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 
-
-local UC = Instance.new("UICorner")
-UC.CornerRadius = UDim.new(0, 8)
-UC.Parent = F
 -- ปุ่ม "เก็บของเองทุกๆ5วิ" (แก้ไขจากโค้ดเดิม)
 local B1 = Instance.new("TextButton")
 B1.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
@@ -155,11 +151,11 @@ UT5.Parent = B5
 
 -- ปุ่ม "เก็บของแบบถือเอง"
 local B6 = Instance.new("TextButton")
-B6.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
-B6.Position = UDim2.new(0.269, 0,0.1, 0) -- ปรับตำแหน่ง Y และขนาด Y
+B6.BackgroundColor3 = Color3.new(0.952941, 1, 0.054902)
+B6.Position = UDim2.new(0.019, 0,0.375, 0) -- ปรับตำแหน่ง Y และขนาด Y
 B6.Size = UDim2.new(0.24, 0,0.25, 0) -- ปรับขนาด Y
 B6.TextSize = 10
-B6.TextColor3 = Color3.new(0.219608, 1, 0.0823529)
+B6.TextColor3 = Color3.new(0, 0, 0)
 B6.Text = "มองไอเท็ม"
 B6.Parent = F
 
@@ -220,7 +216,7 @@ UT6.Parent = B6
 -- ปุ่ม "ทะลุ"
 local B7 = Instance.new("TextButton")
 B7.BackgroundColor3 = Color3.new(1, 0, 0.0156863)
-B7.Position = UDim2.new(0.019, 0,0.375, 0) -- ปรับตำแหน่ง Y และขนาด Y
+B7.Position = UDim2.new(0.269, 0,0.1, 0) -- ปรับตำแหน่ง Y และขนาด Y
 B7.Size = UDim2.new(0.24, 0,0.25, 0) -- ปรับขนาด Y
 B7.TextSize = 10
 B7.TextColor3 = Color3.new(0.219608, 1, 0.0823529)
