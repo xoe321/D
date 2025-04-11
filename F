@@ -30,6 +30,15 @@ menu.MouseButton1Click:Connect(function()
 	F.Visible = true
 end)
 
+local Te = Instance.new("TextLabel")
+Te.BackgroundTransparency = 1
+Te.Position = UDim2.new(0.18, 35,0.05, 0)
+Te.TextSize = 18
+Te.TextColor3 = Color3.new(1, 1, 1)
+Te.Text = "โปรกระจอก! [ฉบับอัพเกรด]"
+Te.Parent = F
+
+
 local UserInputService = game:GetService("UserInputService")
 local dragging, dragStart, startPos
 
@@ -261,6 +270,7 @@ UT8.Parent = B8
 local MusicFrame = Instance.new("Frame")
 MusicFrame.Size = UDim2.new(0.444, 0, 0.6, 0) -- ปรับขนาด Y
 MusicFrame.Position = UDim2.new(0.537 + 0.01, 0, 0.026, 0) -- ขยับไปทางขวาเล็กน้อย
+MusicFrame.BackgroundTransparency = 1
 MusicFrame.BackgroundColor3 = Color3.new(0, 0, 0)
 MusicFrame.Parent = F
 local UC9 = Instance.new("UICorner")
