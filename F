@@ -160,8 +160,50 @@ B6.Position = UDim2.new(0.269, 0,0.1, 0) -- ปรับตำแหน่ง Y 
 B6.Size = UDim2.new(0.24, 0,0.25, 0) -- ปรับขนาด Y
 B6.TextSize = 10
 B6.TextColor3 = Color3.new(0.219608, 1, 0.0823529)
-B6.Text = "รอนะ"
+B6.Text = "มองไอเท็ม"
 B6.Parent = F
+
+B6.MouseButton1Click:Connect(function()
+	local Players = game:GetService("Players")
+	local player = Players.LocalPlayer
+	local runtimeItems = workspace:WaitForChild("RuntimeItems")
+
+	-- ฟังก์ชันกำหนดสีตามชื่อ
+	local function getColorByName(name)
+		if name == "RedBox" then
+			return Color3.fromRGB(255, 0, 0)
+		elseif name == "GreenBox" then
+			return Color3.fromRGB(0, 255, 0)
+		elseif name == "BlueBox" then
+			return Color3.fromRGB(0, 0, 255)
+		else
+			return Color3.fromRGB(255, 255, 0) -- สีเริ่มต้น (เหลือง)
+		end
+	end
+
+	-- ฟังก์ชันเพิ่ม Highlight
+	local function addHighlightToModel(model)
+		if model:IsA("Model") and not model:FindFirstChildOfClass("Highlight") then
+			local highlight = Instance.new("Highlight")
+			highlight.FillColor = getColorByName(model.Name)
+			highlight.OutlineColor = Color3.fromRGB(255, 255, 255) -- ขอบสีขาว
+			highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+			highlight.Parent = model
+		end
+	end
+
+	-- ใส่ให้โมเดลที่มีอยู่แล้ว
+	for _, item in ipairs(runtimeItems:GetChildren()) do
+		addHighlightToModel(item)
+	end
+
+	-- ใส่ให้โมเดลใหม่ที่ถูกเพิ่มเข้ามา
+	runtimeItems.ChildAdded:Connect(function(child)
+		task.wait(0.1)
+		addHighlightToModel(child)
+	end)
+end)
+
 -- local U7 = Instance.new("UIAspectRatioConstraint")
 -- U7.AspectRatio = 2.447
 -- U7.AspectType = "FitWithinMaxSize"
